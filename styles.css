@@ -330,6 +330,26 @@ body {
   color: #fff;
 }
 
+/* Event Card Countdown */
+.countdown-small {
+  gap: 15px;
+  margin-top: 15px;
+  background-color: var(--primary);
+  padding: 10px;
+  border-radius: 10px;
+}
+.countdown-small .time-box {
+  min-width: 40px;
+}
+.countdown-small .time-box h2 {
+  font-size: 1.2rem;
+  color: var(--accent);
+}
+.countdown-small .time-box p {
+  font-size: 0.65rem;
+  color: #fff;
+}
+
 /* =========================================
    Event Sections Base Titles
 ========================================= */
@@ -587,24 +607,24 @@ body {
   background-color: transparent;
 }
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.gallery-grid img {
+.swiper {
   width: 100%;
-  height: 250px;
-  object-fit: cover;
-  border-radius: 8px;
-  transition: transform 0.3s;
 }
 
-.gallery-grid img:hover {
-  transform: scale(1.02);
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 300px;
+  height: 400px;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 /* =========================================
@@ -699,9 +719,7 @@ body {
 /* =========================================
    Footer
 ========================================= */
-.footer {
-  /* Defined in inline HTML to match reference exactly */
-}
+
 
 /* =========================================
    Floating Audio
@@ -773,17 +791,19 @@ body {
 }
 
 @media (max-width: 600px) {
-  .cover-title { font-size: 2.8rem; }
-  .left-title { font-size: 2.8rem; }
-  .couple-names-hero { font-size: 2.8rem; }
+  .cover-title { font-size: 3rem; margin-bottom: 10px; }
+  .left-title { font-size: 3rem; margin-bottom: 10px; }
+  .couple-names-hero { font-size: 3rem; margin-bottom: 15px; }
+  .cover-date { margin-bottom: 20px; font-size: 1rem; }
+  .guest-info { margin-bottom: 20px; padding: 10px 20px; }
 
   .section-title { font-size: 1.5rem; }
-  .initials { font-size: 3rem; }
+  .initials { font-size: 3rem; margin-bottom: 15px; }
   .initials span { font-size: 1.5rem; }
   
   .bride-groom-title { font-size: 1.5rem; }
   
-  .quran-verse { font-size: 0.75rem; padding: 0 10px; }
+  .quran-verse { font-size: 0.75rem; padding: 0 10px; margin-bottom: 30px; }
   
   .event-card {
     padding: 30px 15px;
@@ -792,8 +812,8 @@ body {
   .event-type { font-size: 1.4rem; }
   .event-date { font-size: 1rem; }
   
-  .cursive-layered-title { font-size: 2.5rem; }
-  .cursive-layered-title::before { font-size: 3rem; top: -15%; }
+  .cursive-layered-title { font-size: 2.2rem; }
+  .cursive-layered-title::before { font-size: 2.8rem; top: -20%; }
   
   .story-year { font-size: 1.2rem; }
   .story-text { font-size: 0.85rem; }
@@ -807,4 +827,11 @@ body {
     height: 45px;
     font-size: 1.2rem;
   }
+  
+  .swiper-slide {
+    width: 250px;
+    height: 350px;
+  }
 }
+
+

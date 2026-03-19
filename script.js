@@ -59,27 +59,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Countdown Timer (Sesuaikan dengan tanggal acara)
     // Format: YYYY-MM-DDTHH:MM:SS (Tahun-Bulan-Tanggal T Jam:Menit:Detik)
-    // Contoh untuk 20 Desember 2025 jam 09:00 pagi -> "2025-12-20T09:00:00"
-    const countDownDate = new Date("2025-12-20T09:00:00").getTime();
-
+    const countDownDate = new Date("2026-04-18T08:00:00").getTime();
+    
     const timer = setInterval(() => {
         const now = new Date().getTime();
-        const distance = countDownDate - now;
+        
+        let allFinished = true; // assume all finished until proven otherwise
+        const timers = document.querySelectorAll('.countdown-timer');
+        
+        timers.forEach(t => {
+            let targetTime = countDownDate;
+            const customDate = t.getAttribute('data-date');
+            if (customDate) {
+                targetTime = new Date(customDate).getTime();
+            }
+            
+            const distance = targetTime - now;
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            if (distance < 0) {
+                t.innerHTML = "<h3 style='font-size:0.9rem; color:#fff;'>Acara Sedang Berlangsung / Selesai</h3>";
+            } else {
+                allFinished = false; // at least one is still ticking
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        document.getElementById("days").innerText = days < 10 ? "0" + days : days;
-        document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
-        document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
-        document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
-
-        // Teks ketika waktu sudah habis
-        if (distance < 0) {
+                const elDays = t.querySelector('.days');
+                const elHours = t.querySelector('.hours');
+                const elMinutes = t.querySelector('.minutes');
+                const elSeconds = t.querySelector('.seconds');
+                
+                if (elDays) elDays.innerText = days < 10 ? "0" + days : days;
+                if (elHours) elHours.innerText = hours < 10 ? "0" + hours : hours;
+                if (elMinutes) elMinutes.innerText = minutes < 10 ? "0" + minutes : minutes;
+                if (elSeconds) elSeconds.innerText = seconds < 10 ? "0" + seconds : seconds;
+            }
+        });
+        
+        // Stop the main interval if everything on the page is finished
+        if (timers.length > 0 && allFinished) {
             clearInterval(timer);
-            document.getElementById("countdown").innerHTML = "<h3>Acara Sedang Berlangsung / Selesai</h3>";
         }
     }, 1000);
 
@@ -127,6 +147,20 @@ document.addEventListener('DOMContentLoaded', () => {
         wishesContainer.insertAdjacentHTML('beforeend', wishHtml);
     }
 
+    // Fungsi menghitung dan menampilkan jumlah kehadiran
+    function updateAttendeeCount(wishesData) {
+        let hadir = 0;
+        let tidak = 0;
+        wishesData.forEach(w => {
+            if (w.attendance === "Hadir") hadir++;
+            else tidak++;
+        });
+        const elHadir = document.getElementById('count-hadir');
+        const elTidak = document.getElementById('count-tidak-hadir');
+        if (elHadir) elHadir.innerText = hadir;
+        if (elTidak) elTidak.innerText = tidak;
+    }
+
     // Fungsi memuat data
     async function loadWishes() {
         wishesContainer.innerHTML = ''; // Bersihkan teks loading
@@ -136,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/wishes');
             if (response.ok) {
                 const wishes = await response.json();
+                updateAttendeeCount(wishes);
                 if (wishes.length === 0) {
                     wishesContainer.innerHTML = '<p style="text-align: center; color: #888;">Belum ada ucapan.</p>';
                     return;
@@ -147,14 +182,17 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             // Jika gagal (dibuka dari file:/// lokal tanpa server), gunakan Browser LocalStorage
             const localWishes = JSON.parse(localStorage.getItem('wishes') || '[]');
+            updateAttendeeCount(localWishes);
             
             if (localWishes.length === 0) {
                 // Tampilkan data dummy jika masih kosong sama sekali di LocalStorage
-                addToUI({
+                let dummy = [{
                     name: "Budi & Keluarga",
                     attendance: "Hadir",
                     message: "Selamat menempuh hidup baru Ilham dan Silva! Semoga samawa."
-                });
+                }];
+                updateAttendeeCount(dummy);
+                addToUI(dummy[0]);
             } else {
                 localWishes.reverse().forEach(wish => addToUI(wish));
             }
@@ -196,11 +234,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(newWish)
             });
             if (!res.ok) throw new Error("API failed");
+            
+            // Re-fetch hitungan baru untuk konsistensi
+            const resData = await fetch('/api/wishes');
+            if (resData.ok) {
+                const updatedWishes = await resData.json();
+                updateAttendeeCount(updatedWishes);
+            }
         } catch (err) {
             // Jika tidak ada server, simpan sementara ke file JSON local storage browser
             const localWishes = JSON.parse(localStorage.getItem('wishes') || '[]');
             localWishes.push(newWish);
             localStorage.setItem('wishes', JSON.stringify(localWishes));
+            updateAttendeeCount(localWishes); // Update count di localStorage fallback
         }
         
         // Reset forms 
