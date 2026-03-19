@@ -1,0 +1,810 @@
+/* Base Setup & Variables */
+:root {
+  --primary: #851216;    /* Deep Red/Maroon from the reference */
+  --accent: #dca956;     /* Light Gold from the reference */
+  --light-bg: #ffffff;   /* Pure White sections */
+  --text-dark: #333333;  
+  --text-light: #ffffff; 
+  --font-title: 'Cinzel', serif;
+  --font-script: 'Great Vibes', cursive;
+  --font-body: 'Montserrat', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-body);
+}
+
+body {
+  background-color: var(--primary);
+  color: var(--text-light);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Typography Utilities */
+.script-font {
+  font-family: var(--font-script);
+}
+.title-font {
+  font-family: var(--font-title);
+  letter-spacing: 2px;
+}
+.text-center { text-align: center; }
+.accent-color { color: var(--accent); }
+
+/* Utility Classes */
+.hideme {
+  display: none !important;
+}
+.section {
+  padding: 80px 20px;
+  text-align: center;
+}
+
+/* =========================================
+   Cover / Overlay (Opening Screen) 
+========================================= */
+.cover-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('assets/couple.png') center/cover no-repeat;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+}
+
+/* State when opened */
+.cover-overlay.opened {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cover-content {
+  animation: fadeIn 2s ease-in-out;
+}
+
+.cover-subtitle {
+  font-family: var(--font-body);
+  font-weight: 300;
+  letter-spacing: 3px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.cover-title {
+  font-family: var(--font-script);
+  font-size: 4.5rem;
+  color: var(--text-light);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-bottom: 20px;
+}
+
+.cover-date {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+}
+
+.guest-info {
+  margin-bottom: 40px;
+  background: rgba(0,0,0,0.5);
+  padding: 15px 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.guest-info p {
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: #ccc;
+}
+
+.guest-info h4 {
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--text-light);
+  border: 1px solid var(--accent);
+  padding: 12px 30px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-decoration: none;
+}
+.btn-primary:hover {
+  background-color: var(--accent);
+  color: var(--text-dark);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--text-dark);
+  border: 1px solid var(--primary);
+  padding: 8px 20px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+.btn-outline:hover {
+  background-color: var(--primary);
+  color: var(--text-light);
+}
+
+/* =========================================
+   Main Layout (Split Desktop / Stack Mobile)
+========================================= */
+.main-container {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
+
+/* Left Panel (Fixed Photo & Greeting) */
+.left-panel {
+  width: 50%;
+  position: relative;
+  background: url('assets/couple.png') center/cover no-repeat;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-dark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1;
+}
+
+.left-content {
+  position: relative;
+  z-index: 2;
+  text-align: left;
+  padding: 0 40px;
+  color: var(--text-light);
+}
+
+.left-subtitle {
+  font-family: var(--font-body);
+  letter-spacing: 3px;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.left-title {
+  font-family: var(--font-script);
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  color: var(--text-light);
+}
+
+.left-quote {
+  font-size: 0.85rem;
+  line-height: 1.8;
+  max-width: 400px;
+  margin-bottom: 40px;
+  font-style: italic;
+  font-family: var(--font-body);
+}
+
+.left-guest p {
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+.left-guest h3 {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+}
+
+/* Right Panel (Scrollable Main Content) */
+.right-panel {
+  width: 50%;
+  margin-left: 50%; /* Offset for fixed left-panel */
+  background-color: var(--primary);
+  /* Apply pattern from the image as a dark overlay trick or radial gradient */
+  background-image: 
+      linear-gradient(rgba(133, 18, 22, 0.7), rgba(133, 18, 22, 0.7)),
+      url('https://www.transparenttextures.com/patterns/arabesque.png'); /* Pattern substitute */
+  min-height: 100vh;
+}
+
+/* =========================================
+   Hero Section (Right Panel Top)
+========================================= */
+.hero-section {
+  color: var(--text-light);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 50px;
+  position: relative;
+}
+
+/* The Batik pattern strip at the top */
+.pattern-strip {
+  width: 100%;
+  height: 40px;
+  background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg"><path d="M0,20 L10,10 L20,20 L10,30 Z" fill="%23dca956" opacity="0.8"/></svg>');
+  background-repeat: repeat-x;
+  background-size: 20px 20px;
+  margin-bottom: 30px;
+  border-top: 1px dotted var(--accent);
+  border-bottom: 1px dotted var(--accent);
+}
+
+.hero-arch-frame img {
+  width: 250px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 150px 150px 0 0;
+  border: 2px solid var(--accent);
+  margin-bottom: 20px;
+}
+
+.ornament-divider {
+  width: 80%;
+  max-width: 300px;
+  height: auto;
+  margin: 10px 0 20px 0;
+}
+
+.wedding-of-text {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  color: #fff;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.couple-names-hero {
+  font-family: var(--font-script);
+  font-size: 4rem;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+.countdown-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.time-box {
+  background: transparent;
+  border: none;
+  min-width: 50px;
+  text-align: center;
+  padding: 0;
+}
+
+.time-box h2 {
+  font-family: var(--font-body);
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 0px;
+  font-weight: 500;
+}
+
+.time-box p {
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+/* =========================================
+   Event Sections Base Titles
+========================================= */
+.section-title {
+  font-family: var(--font-title);
+  color: var(--primary);
+  font-size: 2rem;
+  margin-bottom: 30px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+* > .section-title {
+  color: var(--accent); /* If on dark bg */
+}
+.light-bg-section .section-title {
+  color: var(--primary);
+}
+
+/* =========================================
+   Bride & Groom Section
+========================================= */
+.couple-section {
+  background-color: var(--light-bg);
+  color: var(--text-dark);
+  text-align: center;
+}
+.couple-section .section-title { color: var(--primary); }
+
+.initials {
+    font-family: var(--font-script);
+    font-size: 4rem;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.initials span {
+    font-family: var(--font-body);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--primary);
+}
+
+.couple-frame-wide {
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto 30px auto;
+}
+.couple-frame-wide img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.bride-groom-title {
+    font-family: var(--font-title);
+    font-size: 2rem;
+    color: var(--text-dark);
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+    position: relative;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+}
+.bride-groom-title::after {
+    content: "Bride & Groom";
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    transform: scaleY(-0.5);
+    opacity: 0.15;
+    color: var(--text-dark);
+}
+
+.quran-verse {
+  margin-bottom: 50px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 0.85rem;
+  color: #333;
+}
+.verse-ref-container {
+  margin-top: 15px;
+}
+.verse-ref {
+  display: inline-block;
+  background-color: #2F61E1;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+.profile-img-arch img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  margin-bottom: 20px;
+}
+
+.profile-name {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.profile-parent {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.ampersand {
+  font-family: var(--font-script);
+  font-size: 4rem;
+  color: var(--accent);
+  margin: 30px 0;
+}
+
+.btn-instagram {
+  display: inline-block;
+  color: var(--text-light);
+  background-color: #333;
+  text-decoration: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+.btn-instagram:hover {
+  background-color: var(--primary);
+  color: var(--text-light);
+}
+
+/* =========================================
+   Event Section
+========================================= */
+.event-section {
+  background-color: transparent; /* Uses the right-panel maroon bg */
+  color: var(--text-light);
+  position: relative;
+}
+
+.event-card {
+  background-color: var(--light-bg);
+  color: var(--text-dark);
+  padding: 40px 20px;
+  border-radius: 200px 200px 15px 15px;
+  max-width: 400px;
+  margin: 0 auto;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  border: 5px solid var(--accent);
+}
+
+.ornament-icon {
+  font-size: 2.5rem;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+.event-type {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.event-datetime {
+  margin-bottom: 20px;
+  border-top: 1px solid var(--accent);
+  border-bottom: 1px solid var(--accent);
+  padding: 15px 0;
+  width: 80%;
+}
+.event-date {
+  font-family: var(--font-title);
+  color: var(--primary);
+  margin-bottom: 5px;
+  font-size: 1.1rem;
+}
+
+.event-location {
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+  color: #333;
+  width: 90%;
+}
+
+/* =========================================
+   Love Story Section
+========================================= */
+.story-section {
+    background-color: var(--light-bg);
+    color: var(--text-dark);
+    padding: 80px 20px;
+    text-align: center;
+}
+.story-content {
+    max-width: 800px;
+    margin: 40px auto;
+}
+.story-item {
+    margin-bottom: 40px;
+}
+.story-year {
+    font-family: var(--font-body);
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+.story-text {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* =========================================
+   Cursive Layered Title
+========================================= */
+.cursive-layered-title {
+    font-family: var(--font-script);
+    font-size: 4rem;
+    color: var(--text-dark);
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+.cursive-layered-title::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 50%;
+    top: -30%;
+    transform: translateX(-50%);
+    font-size: 5rem;
+    color: rgba(0, 0, 0, 0.04);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 0;
+}
+
+/* =========================================
+   Gallery Section
+========================================= */
+.gallery-section {
+  background-color: transparent;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.gallery-grid img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s;
+}
+
+.gallery-grid img:hover {
+  transform: scale(1.02);
+}
+
+/* =========================================
+   Gift & Web Wishes Section
+========================================= */
+.gift-section {
+  background-color: var(--light-bg);
+  color: var(--text-dark);
+}
+.gift-section .section-title { color: var(--primary); }
+
+.gift-icon-large {
+  font-size: 3rem;
+  color: var(--accent);
+  margin-bottom: 15px;
+}
+.gift-desc {
+  max-width: 500px;
+  margin: 0 auto 40px auto;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.bank-card {
+  background-color: #ffffff;
+  color: var(--text-dark);
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 350px;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+}
+
+.bank-name {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  color: #0c3b88; /* Basic bank color */
+  margin-bottom: 15px;
+}
+
+.account-name { margin-bottom: 5px; font-weight: 500;}
+.account-number { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; letter-spacing: 2px;}
+
+/* =========================================
+   RSVP & Wishes
+========================================= */
+.rsvp-section {
+  background-color: transparent;
+  padding-bottom: 40px;
+}
+.rsvp-form {
+  max-width: 500px;
+  margin: 0 auto 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.rsvp-form input, .rsvp-form textarea, .rsvp-form select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  font-family: var(--font-body);
+  background-color: rgba(255,255,255,0.9);
+}
+
+.wishes-box {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: left;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  border-top: 4px solid var(--accent);
+}
+
+.wish-item {
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+.wish-item:last-child { border-bottom: none; }
+.wish-item h4 { display: inline-block; margin-right: 10px; color: var(--primary); font-family: var(--font-title); }
+.wish-item p { font-size: 0.9rem; color: #555; margin-top: 5px; }
+.badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; color: white;}
+.badge.hadir { background-color: #28a745; }
+.badge.tidak-hadir { background-color: #dc3545; }
+
+/* =========================================
+   Footer
+========================================= */
+.footer {
+  /* Defined in inline HTML to match reference exactly */
+}
+
+/* =========================================
+   Floating Audio
+========================================= */
+.floating-audio {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: var(--primary);
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: none; /* Show after opening */
+}
+
+.playing i {
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   Responsive Media Queries (Mobile View)
+========================================= */
+@media (max-width: 900px) {
+  .main-container {
+    flex-direction: column;
+  }
+  .left-panel {
+    width: 100%;
+    position: relative; /* un-fix for mobile */
+    height: 100vh;
+  }
+  .left-content { 
+    text-align: center; 
+    padding: 0 20px;
+  }
+  .left-quote { margin: 0 auto 30px auto; }
+  .right-panel {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .cover-title { font-size: 3.5rem; }
+  .left-title { font-size: 3.5rem; }
+  .couple-names-hero { font-size: 3.5rem; }
+  
+  .countdown-container {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .time-box {
+    min-width: 60px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cover-title { font-size: 2.8rem; }
+  .left-title { font-size: 2.8rem; }
+  .couple-names-hero { font-size: 2.8rem; }
+
+  .section-title { font-size: 1.5rem; }
+  .initials { font-size: 3rem; }
+  .initials span { font-size: 1.5rem; }
+  
+  .bride-groom-title { font-size: 1.5rem; }
+  
+  .quran-verse { font-size: 0.75rem; padding: 0 10px; }
+  
+  .event-card {
+    padding: 30px 15px;
+    border-radius: 120px 120px 15px 15px;
+  }
+  .event-type { font-size: 1.4rem; }
+  .event-date { font-size: 1rem; }
+  
+  .cursive-layered-title { font-size: 2.5rem; }
+  .cursive-layered-title::before { font-size: 3rem; top: -15%; }
+  
+  .story-year { font-size: 1.2rem; }
+  .story-text { font-size: 0.85rem; }
+  
+  .bank-card { margin: 0 15px 20px 15px; }
+
+  .floating-audio {
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+  }
+}
